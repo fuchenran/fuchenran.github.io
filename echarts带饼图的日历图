@@ -1,0 +1,175 @@
+ $(function(){
+        var chargeConsume = new Array(); // 日总充电量
+        var chargeTimeSum = new Array(); // 日总充电时长
+        var reportDate = new Array(); // 报表日期
+        var commerJson = '接口';
+        var allArr = JSON.parse(commerJson);
+        var taxiCarList = [];
+        console.log(allArr);
+        var passengerVehicleList = [];
+        var specialVehicleList = [];
+        for (var i = 0; i < allArr.length; i++) {
+            var n = Number(allArr[i].reportDate) - 1;
+            if(!taxiCarList[n]){
+                taxiCarList[n] = {
+                    data: []
+                }
+            }
+            taxiCarList[n].data.push({
+                name: allArr[i].dictName,
+                value: (allArr[i].onlinedVeh / 10000).toFixed(2)
+            });
+
+        }
+        var myChart = echarts.init(document.getElementById('morth7'));
+        var cellSize = [100, 100];//每一小格大小
+        var pieRadius = 40;//大小
+        //此处应该是从数据库默认读取当天的数据格式
+        var startDate = '${startDate}';
+        var endDate = '${endDate}';
+        var data_name = ['乘用车','专用车','客车'];//该出应该是从数据库中读取
+        //taxiCarList
+        var options = calendar(cellSize,pieRadius,startDate,endDate,taxiCarList);
+        myChart.setOption(options);
+        //添加点击事件
+        myChart.on('click', function (params) {
+            // 控制台打印数据的名称
+            var  year_month = params.event.event.path[8].startDate;
+            var day = params.seriesIndex;
+            if(day<10){
+                day = "0"+day;
+            }
+            var year_month_day = year_month+"-"+day;//获取当前点击的年月日
+            var status = params.name;//获取当前点击状态名称
+            get_this_click_data({"datetime":year_month_day,"status":status});
+        });
+        function calendar(cellSize,pieRadius,startDate,endDate,json){
+            var data_arr = [];
+                for(var i = 0; i < json.length; i++) {
+                    if(json[i] != undefined){
+                        data_arr.push(json[i].data);
+                    }
+                }
+
+            function getVirtulData() {
+                var date = +echarts.number.parseDate(startDate);
+                var end = +echarts.number.parseDate(endDate);
+                var dayTime = 3600 * 24 * 1000;
+                var data = [];
+                for(var time = date; time < end; time += dayTime) {
+                    data.push([
+                        echarts.format.formatTime('yyyy-MM-dd', time),
+                        Math.floor(Math.random() * 10000)
+                    ]);
+                }
+                return data;
+            }
+
+            function getPieSeries(scatterData, chart) {
+                return echarts.util.map(scatterData, function(item, index) {
+                    var center = chart.convertToPixel('calendar', item);
+
+                    return {
+                        id: index + 'pie',
+                        type: 'pie',
+                        center: center,
+                        label: {
+                            normal: {
+                                formatter: '{c}',
+                                position: 'inside'
+                            }
+                        },
+                        radius: pieRadius,
+                        data: data_arr[index]
+                    };
+                });
+            }
+
+            // 使用刚指定的配置项和数据显示图表。
+
+            function getPieSeriesUpdate(scatterData, chart) {
+                return echarts.util.map(scatterData, function(item, index) {
+                    var center = chart.convertToPixel('calendar', item);
+                    return {
+                        id: index + 'pie',
+                        center: center
+                    };
+                });
+            }
+
+            var scatterData = getVirtulData();
+
+            var option = {
+                tooltip: {},
+                title : {
+                    subtext: '单位（万）',
+                    x:'center',
+                    bottom: 0
+                },
+                legend: {
+                  //  data: data_name,
+                    bottom: 20
+                },
+                calendar: {
+                    top: 'middle',
+                    left: 'center',
+                    orient: 'vertical',
+                    cellSize: cellSize,
+                    yearLabel: {
+                        show: false,
+                        textStyle: {
+                            fontSize: 30
+                        }
+                    },
+                    dayLabel: {
+                        margin: 20,
+                        firstDay: 1,
+                        nameMap: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
+                    },
+                    monthLabel: {
+                        show: false
+                    },
+                    range: [startDate]
+                },
+                series: [{
+                    id: 'label',
+                    type: 'scatter',
+                    coordinateSystem: 'calendar',
+                    symbolSize: 1,
+                    label: {
+                        normal: {
+                            show: true,
+                            formatter: function(params) {
+                                return echarts.format.formatTime('dd', params.value[0]);
+                            },
+                            offset: [-cellSize[0] / 2 + 10, -cellSize[1] / 2 + 10],
+                            textStyle: {
+                                color: '#000',
+                                fontSize: 14
+                            }
+                        }
+                    },
+                    data: scatterData
+                }]
+            };
+
+            if(!myChart.inNode) {
+                var pieInitialized;
+                setTimeout(function() {
+                    pieInitialized = true;
+                    myChart.setOption({
+                        series: getPieSeries(scatterData, myChart)
+                    });
+                }, 10);
+
+                myChart.onresize = function() {
+                    if(pieInitialized) {
+                        myChart.setOption({
+                            series: getPieSeriesUpdate(scatterData, myChart)
+                        });
+                    }
+                };
+            }
+            return option;
+        }
+    });
