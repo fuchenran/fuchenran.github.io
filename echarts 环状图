@@ -1,0 +1,63 @@
+  $(function () {
+        var innernameone = new Array(); // 内部车辆
+        var outnameone = new Array(); // 全部车辆
+        var dictNameArr = new Array(); // 全部车辆
+        var commerJsona ='接口';/*内圈*/
+        var commerJsont = '${jiekou!}';/*外圈*/
+        if (commerJsona) {
+            temp = JSON.parse(commerJsona);
+            for (var i = 0; i < temp.length; i++) {
+                innernameone.push({"name":temp[i].dictName,"value":temp[i].enteringVeh});
+            }
+        }
+        if (commerJsont) {
+            temp = JSON.parse(commerJsont);
+            for (var i = 0; i < temp.length; i++) {
+                outnameone.push({"name":temp[i].dictName,"value":temp[i].enteringVeh});
+                dictNameArr.push(temp[i].dictName);
+            }
+        }
+        var myChart1 = echarts.init(document.getElementById('morth1'));
+        var option1 = {
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b}: {c} ({d}%)"
+            },
+            legend: {
+                orient: 'vertical',
+                x: 'left',
+                data: dictNameArr
+            },
+            series: [
+                {   name: '车辆数',
+                    type:'pie',
+                    selectedMode: 'single',
+                    radius: [0, '40%'],
+                    label: {
+                        normal: {
+                            position: 'inner'
+                        }
+                    },
+                    labelLine: {
+                        normal: {
+                            show: true
+                        }
+                    },
+                    data:innernameone
+                },
+                {
+                    name: '车辆数',
+                    type: 'pie',
+                    radius: ['50%', '65%'],
+                    label: {
+                        normal: {
+                            formatter: '{c},{d}%',
+                        },
+                        labelLine :{show:true}
+                    },
+                    data:outnameone
+                }
+            ]
+        };
+        myChart1.setOption(option1);
+    });
