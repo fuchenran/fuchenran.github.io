@@ -1,0 +1,239 @@
+
+
+
+
+
+
+<script type="text/javascript">
+    	var myChart24 = echarts.init(document.getElementById('morth11'));
+		     var data0 = [
+            [28604, 77,],
+            [31163, 77.4,],
+            [1516, 68,],
+            [13670, 74.7,],
+            [28599, 75,],
+            [29476, 77.1,],
+            [31476, 75.4,],
+            [28666, 78.1,],
+
+        ];
+
+        var data1 = [
+            [44056, 81.8,],
+            [43294, 81.7,],
+            [13334, 76.9, ],
+            [21291, 78.5, ],
+            [38923, 80.8,],
+            [37599, 81.9, ],
+            [44053, 81.1, ],
+
+        ];
+        var data2 = [
+            [44356, 81.8,],
+            [43194, 81.7,],
+            [15334, 76.9,],
+            [31291, 78.5,],
+            [48923, 80.8,],
+            [57599, 81.9,],
+            [24053, 81.1,],
+
+        ];
+		var data = [
+		    [28604, 77],
+		    [31163, 77.4],
+		    [1516, 68],
+		    [13670, 74.7],
+		    [28599, 75],
+		    [29476, 77.1],
+		    [31476, 75.4],
+		    [28666, 78.1],
+		    [1777, 57.7],
+		    [29550, 79.1],
+		    [2076, 67.9],
+		    [12087, 72],
+		    [24021, 75.4],
+		    [43296, 76.8],
+		    [10088, 70.8],
+		    [19349, 69.6],
+		    [10670, 67.3],
+		    [26424, 75.7],
+		    [37062, 75.4],
+		    [44056, 81.8],
+		    [43294, 81.7],
+		    [13334, 76.9],
+		    [21291, 78.5],
+		    [38923, 80.8],
+		    [37599, 81.9],
+		    [44053, 81.1],
+		    [42182, 82.8],
+		    [5903, 66.8],
+		    [36162, 83.5],
+		    [1390, 71.4],
+		    [34644, 80.7],
+		    [34186, 80.6],
+		    [64304, 81.6],
+		    [24787, 77.3],
+		    [23038, 73.13],
+		    [19360, 76.5],
+		    [38225, 81.4],
+		    [53354, 79.1]
+		];
+
+		var myRegression = ecStat.regression('logarithmic', data);
+		
+		myRegression.points.sort(function(a, b) {
+		    return a[0] - b[0];
+		});
+
+		var option24 = {
+	    legend: {
+	        data: ['乘用车', '商用车','物流车'],
+	        bottom: 20
+	    },
+	   
+	    grid: {
+	        top: 80,
+	        bottom: 90
+	    },
+	     tooltip: {
+	        trigger: 'axis',
+	        axisPointer: {
+	            type: 'cross'
+	        }
+	    },
+	    xAxis: {
+	        type: 'value',
+	        splitLine: {
+	            lineStyle: {
+	                type: 'dashed'
+	            }
+	        },
+	    },
+	    yAxis: {
+	        type: 'value',
+	        name:'频次',
+	        splitLine: {
+	            lineStyle: {
+	                type: 'dashed'
+	            }
+	        },
+	    },
+		series: [{
+		        name: '乘用车',
+		        type: 'scatter',
+		        label: {
+		            emphasis: {
+		                show: true,
+		                formatter: function(param) {
+		                    return param.data[3];
+		                },
+		                position: 'top'
+		            }
+		        },
+		        itemStyle: {
+		            normal: {
+		                shadowBlur: 10,
+		                shadowColor: 'rgba(120, 36, 50, 0.5)',
+		                shadowOffsetY: 5,
+		                color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
+		                    offset: 0,
+		                    color: 'rgb(251, 118, 123)'
+		                }, {
+		                    offset: 1,
+		                    color: 'rgb(204, 46, 72)'
+		                }])
+		            }
+		        },
+		        data: data0
+		    }, {
+		        name: '商用车',
+		        type: 'scatter',
+		        label: {
+		            emphasis: {
+		                show: true,
+		                formatter: function(param) {
+		                    return param.data[3];
+		                },
+		                position: 'top'
+		            }
+		        },
+		        itemStyle: {
+		            normal: {
+		                shadowBlur: 10,
+		                shadowColor: 'rgba(25, 100, 150, 0.5)',
+		                shadowOffsetY: 5,
+		                color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
+		                    offset: 0,
+		                    color: 'rgb(129, 227, 238)'
+		                }, {
+		                    offset: 1,
+		                    color: 'rgb(25, 183, 207)'
+		                }])
+		            }
+		        },
+		        data: data1
+		    },
+		    {
+		        name: '物流车',
+		        type: 'scatter',
+		        label: {
+		            emphasis: {
+		                show: true,
+		                formatter: function(param) {
+		                    return param.data[3];
+		                },
+		                position: 'top'
+		            }
+		        },
+		        itemStyle: {
+		            normal: {
+		                shadowBlur: 10,
+		                shadowColor: 'rgba(25, 110, 150, 0.5)',
+		                shadowOffsetY: 5,
+		                color: new echarts.graphic.RadialGradient(0.4, 0.3, 1, [{
+		                    offset: 0,
+		                    color: 'rgb(229, 117, 238)'
+		                }, {
+		                    offset: 1,
+		                    color: 'rgb(225, 183, 217)'
+		                }])
+		            }
+		        },
+		        data: data2
+		    },{
+		        name: 'line',
+		        type: 'line',
+		        lineStyle: {
+		            normal: {
+		                color: '#2f4554'
+		            }
+		        },
+		        smooth: true,
+		        showSymbol: false,
+		        data: myRegression.points,
+		        markPoint: {
+		            itemStyle: {
+		                normal: {
+		                    color: 'transparent'
+		                }
+		            },
+		            label: {
+		                normal: {
+		                    show: true,
+		                    position: 'left',
+		                    formatter: myRegression.expression,
+		                    textStyle: {
+		                        color: '#333',
+		                        fontSize: 14
+		                    }
+		                }
+		            },
+		            data: [{
+		                coord: myRegression.points[myRegression.points.length - 1]
+		            }]
+		        }
+		    }]
+		}; 
+		myChart24.setOption(option24);
+    	
+    </script>
