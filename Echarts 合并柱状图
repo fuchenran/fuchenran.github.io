@@ -1,0 +1,71 @@
+存在两个柱状轴也就是两个bar 另 stack:'nanen',相同；保证两个数据展示不影响；也就是让其中一个数据存在偏移    offset:[10,0],。
+
+
+		var option3 = {
+				    grid: {
+				        left: '3%',
+				        right:'12%',
+				        top:0,
+				        bottom:0,
+				        containLabel: true,
+				    },
+				    xAxis: {
+				        type: 'value',
+				        show:false ,
+				        splitLine:{  
+				        　　	show:false  
+				        　　} 
+				    },
+				    yAxis: {
+				        type: 'category',
+				          axisLabel:{
+				              textStyle:{
+				                 fontSize:12
+				            }
+				          },
+				        data: ['浙江省','上海市','山东省','广东省','北京市',]
+				    },
+				    series: [
+				        {
+				            type: 'bar',
+				            itemStyle:{
+		                        normal:{
+		                            color:'#3398DB'
+		                        }
+		                    },
+		                    stack:'nanen',
+				             label: {
+					                normal: {
+					                    show: true,
+					                    fontSize:12,
+					                    color:'#333',
+					                    position:'inside'
+					                }
+					            },
+				            data:[3, 38, 40892, 41608, 72294,]
+				              
+				        },{
+				            type: 'bar',
+				            itemStyle:{
+		                        normal:{
+		                            color:'#3398DB',
+		                           
+		                        }
+		                    },
+		                    stack:'nanen',
+				             label: {
+					                normal: {
+					                	fontSize:12,
+					                    show: true,
+					                    color:'#000',
+					                    formatter: "{c}%",
+					                    position: 'right',
+					                    offset:[10,0],
+					                   
+					                }
+					            },
+				            data:[10, 20, 30, 40, 50.23,]
+				              
+				        },
+				    ]
+				};
